@@ -1,3 +1,7 @@
+var observable = Rx.Observable.create((observer) => {
+    observer.next()
+});
+
 let userTypesInSearchBox = Rx.Observable.fromEvent(
     $("#search-box"),
     'keyup'
@@ -7,7 +11,26 @@ let userTypesInSearchBox = Rx.Observable.fromEvent(
     });
 
 
-let searchResult = userTypesInSearchBox
+
+Rx.Observable.create((observer) => {
+    observer.map((event) => {
+        event
+    .debounce(250)
+            .concatMap(() => {
+                return Rx.Observable.fromPromise(
+                    $.get('http://localhost:8080/warnings')
+                )
+                    .catch((response) => {
+                        return Rx.Observable.empty();
+                    });
+            });
+    })
+});
+
+
+
+
+let searchResult = observable
     .debounce(250)
     .concatMap(() => {
         return Rx.Observable.fromPromise(
