@@ -14,7 +14,6 @@ window.subscribe = () => {
 
     ws.onmessage = (message) => {
         const data = JSON.parse(message.data);
-        console.log(JSON.stringify(data));
         if (firstRun) {
             _results = [];
             firstRun = false;
